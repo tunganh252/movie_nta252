@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:movie_nta252/models/movie.dart';
 import 'package:movie_nta252/models/search_category.dart';
+import 'package:movie_nta252/widgets/movie_tile.dart';
 
 class MainPage extends ConsumerWidget {
   double? deviceHeight;
@@ -58,7 +60,14 @@ class MainPage extends ConsumerWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [_topBarWidget()],
+        children: [
+          _topBarWidget(),
+          Container(
+            height: deviceHeight! * 0.83,
+            padding: EdgeInsets.symmetric(vertical: deviceHeight! * 0.01),
+            child: _moviesListViewWidget(),
+          )
+        ],
       ),
     );
   }
@@ -70,7 +79,7 @@ class MainPage extends ConsumerWidget {
           color: Colors.black54, borderRadius: BorderRadius.circular(20.0)),
       child: Row(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [_searchFieldWidget(), _categorySelectionWidget()],
       ),
@@ -135,5 +144,49 @@ class MainPage extends ConsumerWidget {
         )
       ],
     );
+  }
+
+  Widget _moviesListViewWidget() {
+    final List<Movie> _movies = [];
+
+    for (var i = 0; i < 20; i++) {
+      _movies.add(Movie(
+          name: "The Suicide Squad",
+          language: "en",
+          isAdult: false,
+          description:
+              "Supervillains Harley Quinn, Bloodsport, Peacemaker and a collection of nutty cons at Belle Reve prison join the super-secret, super-shady Task Force X as they are dropped off at the remote, enemy-infused island of Corto Maltese.",
+          posterPath: "/iCi4c4FvVdbaU1t8poH1gvzT6xM.jpg",
+          rating: 8.1,
+          backdropPath: "/7WJjFviFBffEJvkAms4uWwbcVUk.jpg",
+          releaseDate: "2021-08-19"));
+    }
+
+    if (_movies.length > 0) {
+      return ListView.builder(
+          itemCount: _movies.length,
+          itemBuilder: (BuildContext _context, int _count) {
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: deviceHeight! * 0.01, horizontal: 0),
+              child: GestureDetector(
+                onTap: () {},
+                child: MovieTile(
+                  height: deviceHeight! * 0.2,
+                  width: deviceWidth! * 0.85,
+                  movie: _movies[_count],
+                ),
+              ),
+            );
+          });
+    } else {
+      return Center(
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.white,
+        ),
+      );
+    }
+
+    // return Container();
   }
 }
