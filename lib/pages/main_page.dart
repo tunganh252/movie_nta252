@@ -2,19 +2,34 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:movie_nta252/controller/main_page_data_controller.dart';
+import 'package:movie_nta252/models/main_page_data.dart';
 import 'package:movie_nta252/models/movie.dart';
 import 'package:movie_nta252/models/search_category.dart';
 import 'package:movie_nta252/widgets/movie_tile.dart';
 
+final mainPageDataControllerProvider =
+    StateNotifierProvider<MainPageDataController, MainPageData>((ref) {
+  return MainPageDataController();
+});
+
 class MainPage extends ConsumerWidget {
   double? deviceHeight;
   double? deviceWidth;
+
+  MainPageDataController? mainPageDataController;
+  MainPageData? mainPageData;
+
   TextEditingController? searchTextFieldController;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     deviceHeight = MediaQuery.of(context).size.height;
     deviceWidth = MediaQuery.of(context).size.width;
+
+    mainPageDataController = watch(mainPageDataControllerProvider.notifier);
+    mainPageData = watch(mainPageDataControllerProvider);
+
     searchTextFieldController = TextEditingController();
     return _buildUI();
   }
@@ -148,9 +163,10 @@ class MainPage extends ConsumerWidget {
   }
 
   Widget _moviesListViewWidget() {
-    final List<Movie> _movies = [];
+    final List<Movie> _movies = mainPageData!.movies!;
+    // final List<Movie> _movies = [];
 
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 5; i++) {
       _movies.add(Movie(
           name: "The Suicide Squad",
           language: "en",

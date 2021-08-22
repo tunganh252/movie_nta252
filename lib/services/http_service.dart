@@ -15,19 +15,20 @@ class HTTPService {
     apiKey = _config.apiKey;
   }
 
-  Future<Response?> get(String _path,
-      {required Map<String, dynamic> query}) async {
+  Future<Response?> get(String _path, {Map<String, dynamic>? query}) async {
     try {
       String _url = '$baseUrl$_path';
-      Map<String, dynamic> _query = {'api_key': apiKey, 'language': 'en-US'};
-      // ignore: unnecessary_null_comparison
+      Map<String, dynamic> _query = {
+        'api_key': apiKey,
+        'language': 'en-US',
+      };
       if (query != null) {
         _query.addAll(query);
       }
       return await dio.get(_url, queryParameters: _query);
     } on DioError catch (e) {
       print('Unable to perform get request.');
-      print('Error: $e');
+      print('DioError:$e');
     }
   }
 }
